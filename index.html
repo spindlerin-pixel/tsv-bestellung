@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TSV Iggelheim Leichtathletik – Sammelbestellung Teamkleidung</title>
+<meta name="description" content="Sammelbestellung Teamkleidung der Abteilung Leichtathletik des TSV Iggelheim">
+<meta property="og:title" content="TSV Iggelheim Leichtathletik – Sammelbestellung">
+<meta property="og:description" content="Teamkleidung auswählen, Größe und Anzahl in den Warenkorb legen und Bestellung absenden.">
+<meta property="og:image" content="/img/hoodie_b.jpg">
+<meta name="theme-color" content="#1849a9">
+<style>
+:root{--blue:#1849a9;--navy:#0f2a5c;--light:#eef3fc;--line:#d7deea;--text:#1b2433;--muted:#5d6878;--ok:#1a7f47;--warn:#b5560b}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:#f6f8fb;line-height:1.4;padding-bottom:84px}
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:22px 16px 18px}
+header .wrap{max-width:1100px;margin:0 auto}
+header small{opacity:.8;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+header h1{margin:4px 0 6px;font-size:24px;line-height:1.15}
+header p{margin:0;opacity:.9;font-size:15px}
+main{max-width:1100px;margin:0 auto;padding:12px}
+.info{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:6px 0 14px;font-size:14px}
+.info b{color:var(--navy)}
+.info ul{margin:6px 0 0;padding-left:18px}
+nav.tabs{position:sticky;top:0;z-index:5;background:#f6f8fb;display:flex;gap:6px;padding:8px 0;overflow-x:auto}
+nav.tabs button{flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer}
+nav.tabs button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+h2.cat{font-size:18px;margin:18px 2px 8px;color:var(--navy)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pic{position:relative;background:#fff;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.pic img{max-width:88%;max-height:88%;object-fit:contain}
+.pic .flip{position:absolute;right:8px;bottom:8px;background:rgba(15,42,92,.85);color:#fff;font-size:12px;border-radius:999px;padding:4px 9px}
+.body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.body h3{margin:0;font-size:16px}
+.art{font-size:12px;color:var(--muted)}
+.prices{font-size:13px;color:var(--muted)}
+.prices span{display:block}
+label.f{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+select,input[type=text],input[type=email],input[type=tel],textarea{width:100%;font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--text)}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row>div{flex:1}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;height:41px}
+.qty button{width:38px;height:100%;border:0;background:var(--light);font-size:20px;color:var(--navy);cursor:pointer}
+.qty input{width:40px;border:0;text-align:center;font-size:16px;padding:0}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px}
+.chk input{width:20px;height:20px}
+.btn{border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:700;font-size:15px;padding:11px 14px;cursor:pointer;width:100%}
+.btn:disabled{opacity:.5}
+.btn.sec{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn.wa{background:#1fa855}
+.est{font-size:13px;color:var(--navy);font-weight:600}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--navy);color:#fff;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;z-index:20;box-shadow:0 -4px 14px rgba(0,0,0,.15)}
+.bar .t{flex:1;font-size:14px}
+.bar .t b{font-size:16px}
+.bar .btn{width:auto;background:#fff;color:var(--navy)}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ok);color:#fff;padding:9px 16px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:30}
+.toast.show{opacity:1}
+.overlay{position:fixed;inset:0;background:rgba(10,20,40,.5);z-index:40;display:none;overflow-y:auto}
+.overlay.open{display:block}
+.sheet{background:#fff;max-width:720px;margin:0 auto;min-height:100%;padding:16px 16px 40px}
+.sheet h2{margin:4px 0 10px;color:var(--navy)}
+.close{float:right;border:0;background:var(--light);border-radius:999px;width:36px;height:36px;font-size:20px;cursor:pointer;color:var(--navy)}
+.cart-item{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:10px 0;align-items:center}
+.cart-item img{width:56px;height:56px;object-fit:contain;border:1px solid var(--line);border-radius:8px;background:#fff}
+.cart-item .d{flex:1;font-size:14px}
+.cart-item .d small{color:var(--muted);display:block}
+.cart-item .rm{border:0;background:none;color:#b42318;font-size:13px;cursor:pointer;padding:6px}
+.tot{display:flex;justify-content:space-between;font-weight:700;margin:12px 0 4px}
+.hint{font-size:12px;color:var(--muted)}
+fieldset{border:1px solid var(--line);border-radius:12px;padding:10px 12px 12px;margin:14px 0}
+legend{font-weight:700;color:var(--navy);padding:0 6px}
+.fg{margin-bottom:9px}
+.radio{display:flex;gap:18px;font-size:15px;margin:4px 0 8px}
+.radio label{display:flex;gap:6px;align-items:center}
+.radio input{width:20px;height:20px}
+.err{color:#b42318;font-size:14px;margin:8px 0;display:none}
+.hidden{display:none!important}
+.success{background:#e9f7ef;border:1px solid #b6e3c8;border-radius:12px;padding:12px 14px;margin-bottom:14px}
+.actions{display:grid;gap:8px;margin-top:12px}
+/* Bestellformular (Druck) */
+.doc{border:1px solid var(--line);border-radius:10px;padding:16px;font-family:Cambria,Georgia,serif;font-size:13px;background:#fff}
+.doc h3{text-align:center;color:#2f5597;margin:0 0 4px;font-size:18px}
+.doc .sub{text-align:center;margin:0 0 12px;font-size:12px}
+.doc table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.doc td,.doc th{border:1px solid #444;padding:4px 6px;text-align:left;vertical-align:top}
+.doc th{background:#f2f2f2}
+.doc .k{width:32%}
+@media print{
+ body{background:#fff;padding:0}
+ header,main,.bar,.toast,.noprint{display:none!important}
+ .overlay{position:static;display:block!important;background:none}
+ .sheet{padding:0;max-width:none}
+ .doc{border:0;padding:0;font-size:12px}
+ @page{size:A4;margin:14mm}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <small>TSV Iggelheim · Abteilung Leichtathletik</small>
+ <h1>Sammelbestellung Teamkleidung</h1>
+ <p>Artikel auswählen, Größe und Anzahl festlegen, in den Warenkorb legen – das Bestellformular wird automatisch erstellt.</p>
+</div></header>
+
+<main>
+ <div class="info">
+  <b>So funktioniert's:</b>
+  <ul>
+   <li>Bei jedem Artikel Größe, Anzahl und optional Initialen wählen → <b>„In den Warenkorb“</b>.</li>
+   <li>Unten auf <b>„Warenkorb & Bestellen“</b> tippen, Kontaktdaten eintragen und absenden.</li>
+   <li>Danach kannst du dein ausgefülltes Bestellformular speichern/drucken.</li>
+  </ul>
+  <p style="margin:8px 0 0"><b>Preise:</b> Angegeben ist die UVP. Vereinspreis: <b>UVP −45 %</b>. Dazu Rückenschriftzug „TSV Iggelheim Leichtathletik“ (doppelzeilig) <b>+8,00 €</b> und Initialen <b>+3,50 €</b>. Der angezeigte Preis ist bereits der Vereinspreis.</p>
+ </div>
+
+ <nav class="tabs" id="tabs"></nav>
+ <div id="catalog"></div>
+</main>
+
+<div class="bar">
+ <div class="t"><span id="barCount">Warenkorb leer</span><br><b id="barSum"></b></div>
+ <button class="btn" id="openCart">Warenkorb &amp; Bestellen</button>
+</div>
+<div class="toast" id="toast">Zum Warenkorb hinzugefügt ✓</div>
+
+<div class="overlay" id="overlay">
+ <div class="sheet">
+  <button class="close noprint" id="closeCart" aria-label="Schließen">×</button>
+
+  <div id="checkout">
+   <h2>Warenkorb</h2>
+   <div id="cartList"></div>
+   <div class="tot"><span>Gesamt (Vereinspreis)*</span><span id="cartSum">0,00 €</span></div>
+   <div class="hint">* UVP −45 % inkl. Schriftzug/Initialen.</div>
+
+   <form name="bestellung" id="orderForm" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+    <input type="hidden" name="form-name" value="bestellung">
+    <p class="hidden"><label>Nicht ausfüllen: <input name="bot-field"></label></p>
+    <fieldset>
+     <legend>Besteller/in</legend>
+     <div class="fg"><label class="f" for="f_name">Name *</label><input type="text" id="f_name" name="name" autocomplete="name" required></div>
+     <div class="fg"><label class="f" for="f_sportler">Für wen? (Name Sportler/in, falls abweichend)</label><input type="text" id="f_sportler" name="sportler"></div>
+     <div class="fg"><label class="f" for="f_str">Straße / Hausnummer *</label><input type="text" id="f_str" name="strasse" autocomplete="street-address" required></div>
+     <div class="fg"><label class="f" for="f_plz">PLZ / Ort *</label><input type="text" id="f_plz" name="plz_ort" autocomplete="postal-code" required></div>
+     <div class="fg"><label class="f" for="f_tel">Telefon *</label><input type="tel" id="f_tel" name="telefon" autocomplete="tel" required></div>
+     <div class="fg"><label class="f" for="f_mail">E-Mail *</label><input type="email" id="f_mail" name="email" autocomplete="email" required></div>
+    </fieldset>
+    <fieldset>
+     <legend>Lieferung</legend>
+     <div class="radio">
+      <label><input type="radio" name="versand" value="Abholung" checked> Abholung</label>
+      <label><input type="radio" name="versand" value="Versand"> Versand</label>
+     </div>
+     <div id="shipBox" class="hidden">
+      <div class="radio">
+       <label><input type="radio" name="versandadresse_art" value="wie oben" checked> wie oben</label>
+       <label><input type="radio" name="versandadresse_art" value="abweichend"> an:</label>
+      </div>
+      <textarea id="f_ship" name="versandadresse" rows="2" class="hidden" placeholder="Abweichende Versandadresse"></textarea>
+     </div>
+    </fieldset>
+    <div class="fg"><label class="f" for="f_note">Bemerkung (optional)</label><textarea id="f_note" name="bemerkung" rows="2"></textarea></div>
+    <textarea name="bestellung" id="f_order" class="hidden"></textarea>
+    <input type="hidden" name="anzahl_teile" id="f_count">
+    <input type="hidden" name="richtpreis" id="f_sum">
+    <input type="hidden" name="subject" id="f_subject" value="Neue Bestellung TSV Iggelheim Leichtathletik">
+    <div class="err" id="err"></div>
+    <button class="btn" type="submit" id="sendBtn">Bestellung verbindlich absenden</button>
+   </form>
+  </div>
+
+  <div id="done" class="hidden">
+   <div class="success noprint"><b>Danke! Deine Bestellung ist eingegangen.</b><br>Hier ist dein ausgefülltes Bestellformular zum Speichern.</div>
+   <div class="doc" id="doc"></div>
+   <div class="actions noprint">
+    <button class="btn" id="printBtn">Als PDF speichern / drucken</button>
+    <button class="btn wa" id="waBtn">Bestellung per WhatsApp teilen</button>
+    <button class="btn sec" id="newBtn">Neue Bestellung (z. B. für ein weiteres Kind)</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+const PRINT = 8.00, INIT = 3.50, FACTOR = 0.55;
+const ADULT_XS5 = ["XS","S","M","L","XL","2XL","3XL","4XL","5XL"];
+const ADULT_S3 = ["S","M","L","XL","2XL","3XL"];
+const KID_116 = ["116","128","140","152","164"];
+const KID_128 = ["128","140","152","164"];
+const W_34_44 = ["34","36","38","40","42","44"];
+const g = (label, sizes, price) => ({label, sizes, price});
+
+const PRODUCTS = [
+ // Herren & Kinder
+ {id:"hoodie",cat:"Herren & Kinder",name:"Kapuzenjacke",art:"1032530",img:["hoodie","hoodie_b"],print:true,groups:[g("Erwachsene",ADULT_XS5,64.99),g("Kinder",KID_116,59.99)]},
+ {id:"tshirt",cat:"Herren & Kinder",name:"T-Shirt",art:"2082629",img:["tshirt","tshirt_b"],print:true,groups:[g("Erwachsene",ADULT_XS5,17.99),g("Kinder",KID_116,15.99)]},
+ {id:"laufjacke",cat:"Herren & Kinder",name:"Laufjacke",art:"8060705",img:["laufjacke","laufjacke_b"],print:true,groups:[g("Erwachsene",ADULT_S3,64.99),g("Kinder",KID_128,59.99)]},
+ {id:"funktion",cat:"Herren & Kinder",name:"Funktionsshirt",art:"8082604",img:["funktion","funktion_b"],print:true,groups:[g("Erwachsene",ADULT_S3,39.99),g("Kinder",KID_128,34.99)]},
+ {id:"tank",cat:"Herren & Kinder",name:"Tanktop",art:"8282604",img:["tank","tank_b"],print:true,groups:[g("Erwachsene",ADULT_S3,34.99),g("Kinder",KID_128,29.99)]},
+ {id:"allwetter",cat:"Herren & Kinder",name:"Team Allwetterjacke (Unisex)",art:"2052207",img:["allwetter"],print:true,groups:[g("Erwachsene",ADULT_S3,59.99),g("Kinder",KID_128,54.99)]},
+ {id:"hose",cat:"Herren & Kinder",name:"Trainingshose",art:"1102505",img:["hose"],print:false,groups:[g("Erwachsene",ADULT_S3,49.99),g("Kinder",KID_116,44.99)]},
+ {id:"tightl",cat:"Herren & Kinder",name:"Lauftight lang",art:"8292314",img:["tightl"],print:false,groups:[g("Erwachsene",ADULT_S3,59.99),g("Kinder",KID_128,54.99)]},
+ {id:"tightk",cat:"Herren & Kinder",name:"Lauftight kurz",art:"8292603",img:["tightk"],print:false,groups:[g("Erwachsene",ADULT_S3,34.99),g("Kinder",KID_128,29.99)]},
+ {id:"short",cat:"Herren & Kinder",name:"Running Short",art:"809600",img:["short"],print:false,groups:[g("Erwachsene",["S","M","L","XL","2XL"],44.99),g("Kinder",KID_128,39.99)]},
+ // Damen
+ {id:"hoodie_w",cat:"Damen",name:"Kapuzenjacke Damen",art:"1032537",img:["hoodie_w","hoodie_w_b"],print:true,groups:[g("Damen",W_34_44,64.99)]},
+ {id:"tshirt_w",cat:"Damen",name:"T-Shirt Damen",art:"2082679",img:["tshirt_w","tshirt_w_b"],print:true,groups:[g("Damen",W_34_44,17.99)]},
+ {id:"laufjacke_w",cat:"Damen",name:"Laufjacke Damen",art:"8060702",img:["laufjacke_w","laufjacke_w_b"],print:true,groups:[g("Damen",["34","36","38","40","42","44","46","48"],64.99)]},
+ {id:"funktion_w",cat:"Damen",name:"Funktionsshirt Damen",art:"8082611",img:["funktion_w","funktion_w_b"],print:true,groups:[g("Damen",W_34_44,39.99)]},
+ {id:"tank_w",cat:"Damen",name:"Tanktop Damen",art:"8282611",img:["tank_w","tank_w_b"],print:true,groups:[g("Damen",W_34_44,34.99)]},
+ {id:"bra",cat:"Damen",name:"Sport Bra",art:"8282618",img:["bra","bra_b"],print:true,groups:[g("Damen",["32","34","36","38","40"],39.99)]},
+ {id:"hose_w",cat:"Damen",name:"Trainingshose Damen",art:"1102502",img:["hose_w"],print:false,groups:[g("Damen",W_34_44,49.99)]},
+ {id:"tightl_w",cat:"Damen",name:"Lauftight lang Damen",art:"8292316",img:["tightl_w"],print:false,groups:[g("Damen",W_34_44,59.99)]},
+ {id:"tightk_w",cat:"Damen",name:"Lauftight kurz Damen",art:"8292606",img:["tightk_w"],print:false,groups:[g("Damen",W_34_44,34.99)]},
+ {id:"short_w",cat:"Damen",name:"Running Short Damen",art:"809601",img:["short_w"],print:false,groups:[g("Damen",W_34_44,44.99)]},
+ // Zubehör
+ {id:"tasche",cat:"Zubehör",name:"Sporttasche",art:"7232310",img:["tasche"],print:false,noInit:false,groups:[{label:"Größe",sizes:["S","M","L"],price:{S:39.99,M:44.99,L:49.99}}]},
+ {id:"rucksack",cat:"Zubehör",name:"Rucksack",art:"7232318",img:["rucksack"],print:false,groups:[g("Größe",["One Size"],34.99)]}
+];
+const CATS = ["Herren & Kinder","Damen","Zubehör"];
+
+const eur = n => n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+function uvpFor(p,size){
+ for(const gr of p.groups){ if(gr.sizes.includes(size)) return typeof gr.price==="object"?gr.price[size]:gr.price; }
+ return 0;
+}
+function itemPrice(it){ const p=PRODUCTS.find(x=>x.id===it.id); return Math.round((uvpFor(p,it.size)*FACTOR + (it.print?PRINT:0) + (it.initials?INIT:0))*100)/100; }
+
+let cart=[];
+try{ cart=JSON.parse(localStorage.getItem("tsv_la_cart")||"[]")||[]; }catch(e){ cart=[]; }
+function save(){ try{ localStorage.setItem("tsv_la_cart",JSON.stringify(cart)); }catch(e){} }
+
+function priceLines(p){
+ return p.groups.map(gr=>{
+  if(typeof gr.price==="object") return `<span>${gr.sizes.map(s=>`${s}: UVP ${eur(gr.price[s])}`).join(" · ")}</span>`;
+  const r = gr.sizes.length>1?`${gr.sizes[0]}–${gr.sizes[gr.sizes.length-1]}`:gr.sizes[0];
+  return `<span>${gr.label} (${r}): UVP ${eur(gr.price)}</span>`;
+ }).join("");
+}
+function sizeOptions(p){
+ let h='<option value="">– Größe wählen –</option>';
+ for(const gr of p.groups){
+  const opts=gr.sizes.map(s=>`<option value="${s}">${s}</option>`).join("");
+  h += p.groups.length>1?`<optgroup label="${gr.label}">${opts}</optgroup>`:opts;
+ }
+ return h;
+}
+
+function render(){
+ const tabs=$("tabs"), cat=$("catalog");
+ tabs.innerHTML=CATS.map((c,i)=>`<button data-c="${i}" class="${i===0?"on":""}">${c}</button>`).join("");
+ cat.innerHTML=CATS.map((c,i)=>`<h2 class="cat" id="cat${i}">${c}</h2><div class="grid">${
+  PRODUCTS.filter(p=>p.cat===c).map(p=>`
+  <div class="card" data-id="${p.id}">
+   <div class="pic" data-i="0"><img src="img/${p.img[0]}.jpg" alt="${esc(p.name)}" loading="lazy">${p.img.length>1?'<span class="flip">↻ Rückseite</span>':""}</div>
+   <div class="body">
+    <div><h3>${esc(p.name)}</h3><div class="art">Art.-Nr. ${p.art}${p.print?" · mit Vereinsdruck möglich":""}</div></div>
+    <div class="prices">${priceLines(p)}</div>
+    <div class="row">
+     <div><label class="f">Größe</label><select class="size">${sizeOptions(p)}</select></div>
+     <div style="flex:0 0 auto"><label class="f">Anzahl</label><div class="qty"><button type="button" class="minus" aria-label="weniger">−</button><input class="q" type="text" inputmode="numeric" value="1" aria-label="Anzahl"><button type="button" class="plus" aria-label="mehr">+</button></div></div>
+    </div>
+    ${p.print?`<label class="chk"><input type="checkbox" class="pr" checked> Rückenschriftzug „TSV Iggelheim Leichtathletik“ (+8,00 €)</label>`:""}
+    <div><label class="f">Initialen (optional, +3,50 €)</label><input type="text" class="ini" maxlength="4" placeholder="z. B. AB" autocapitalize="characters"></div>
+    <div class="est"></div>
+    <button class="btn add" type="button">In den Warenkorb</button>
+   </div>
+  </div>`).join("")}</div>`).join("");
+
+ tabs.onclick=e=>{const b=e.target.closest("button");if(!b)return;
+  tabs.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  const t=$("cat"+b.dataset.c); window.scrollTo({top:t.getBoundingClientRect().top+scrollY-60,behavior:"smooth"});};
+
+ cat.querySelectorAll(".card").forEach(card=>{
+  const p=PRODUCTS.find(x=>x.id===card.dataset.id);
+  const sel=card.querySelector(".size"), q=card.querySelector(".q"), ini=card.querySelector(".ini"), pr=card.querySelector(".pr"), est=card.querySelector(".est");
+  const pic=card.querySelector(".pic");
+  if(p.img.length>1) pic.onclick=()=>{const i=pic.dataset.i==="0"?1:0;pic.dataset.i=i;pic.querySelector("img").src=`img/${p.img[i]}.jpg`;pic.querySelector(".flip").textContent=i?"↻ Vorderseite":"↻ Rückseite";};
+  const upd=()=>{ if(!sel.value){est.textContent="";return;}
+   const it={id:p.id,size:sel.value,print:pr?pr.checked:false,initials:ini.value.trim()}; const n=Math.max(1,parseInt(q.value)||1);
+   est.textContent=`Vereinspreis ${eur(itemPrice(it))} pro Stück`+(n>1?` · ${eur(itemPrice(it)*n)} gesamt`:""); };
+  card.querySelector(".minus").onclick=()=>{q.value=Math.max(1,(parseInt(q.value)||1)-1);upd();};
+  card.querySelector(".plus").onclick=()=>{q.value=Math.min(50,(parseInt(q.value)||1)+1);upd();};
+  [sel,q,ini].forEach(el=>el.addEventListener("input",upd)); if(pr) pr.onchange=upd;
+  ini.addEventListener("input",()=>{ini.value=ini.value.toUpperCase();});
+  card.querySelector(".add").onclick=()=>{
+   if(!sel.value){sel.focus();sel.style.borderColor="#b42318";setTimeout(()=>sel.style.borderColor="",1500);return;}
+   const it={id:p.id,size:sel.value,qty:Math.max(1,parseInt(q.value)||1),print:pr?pr.checked:false,initials:ini.value.trim()};
+   const ex=cart.find(c=>c.id===it.id&&c.size===it.size&&c.print===it.print&&c.initials===it.initials);
+   if(ex) ex.qty+=it.qty; else cart.push(it);
+   save(); updateBar(); toast();
+   q.value=1; ini.value=""; sel.value=""; upd();
+  };
+ });
+}
+
+function toast(){const t=$("toast");t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1400);}
+function totals(){ let n=0,s=0; cart.forEach(it=>{n+=it.qty;s+=itemPrice(it)*it.qty;}); return {n,s:Math.round(s*100)/100}; }
+function updateBar(){ const {n,s}=totals(); $("barCount").textContent=n?`${n} Teil${n>1?"e":""} im Warenkorb`:"Warenkorb leer"; $("barSum").textContent=n?`Gesamt ${eur(s)}`:""; }
+
+function renderCart(){
+ const l=$("cartList");
+ if(!cart.length){ l.innerHTML='<p class="hint">Noch nichts im Warenkorb. Schließe dieses Fenster und wähle Artikel aus.</p>'; }
+ else l.innerHTML=cart.map((it,i)=>{const p=PRODUCTS.find(x=>x.id===it.id);return `
+  <div class="cart-item"><img src="img/${p.img[0]}.jpg" alt="">
+   <div class="d"><b>${esc(p.name)}</b><small>Art.-Nr. ${p.art} · Größe ${esc(it.size)}${it.print?" · Schriftzug":""}${it.initials?` · Initialen „${esc(it.initials)}“`:""}</small><small>${eur(itemPrice(it))} / Stück</small></div>
+   <div class="qty" style="height:36px"><button type="button" data-a="-" data-i="${i}">−</button><input value="${it.qty}" readonly style="width:32px"><button type="button" data-a="+" data-i="${i}">+</button></div>
+   <button class="rm" data-a="x" data-i="${i}">Entfernen</button></div>`;}).join("");
+ $("cartSum").textContent=eur(totals().s);
+ $("sendBtn").disabled=!cart.length;
+}
+$("cartList").onclick=e=>{const b=e.target.closest("button");if(!b)return;const i=+b.dataset.i;
+ if(b.dataset.a==="+")cart[i].qty++; else if(b.dataset.a==="-"){cart[i].qty--; if(cart[i].qty<1)cart.splice(i,1);} else if(b.dataset.a==="x")cart.splice(i,1);
+ save();renderCart();updateBar();};
+
+$("openCart").onclick=()=>{ $("checkout").classList.remove("hidden"); $("done").classList.add("hidden"); renderCart(); $("overlay").classList.add("open"); document.body.style.overflow="hidden"; $("overlay").scrollTop=0; };
+$("closeCart").onclick=()=>{ $("overlay").classList.remove("open"); document.body.style.overflow=""; };
+
+const form=$("orderForm");
+form.addEventListener("change",()=>{
+ const v=form.versand.value==="Versand"; $("shipBox").classList.toggle("hidden",!v);
+ $("f_ship").classList.toggle("hidden",!(v&&form.versandadresse_art.value==="abweichend"));
+});
+
+function orderText(){
+ return cart.map(it=>{const p=PRODUCTS.find(x=>x.id===it.id);
+  return `${it.qty}x ${p.art} ${p.name} | Gr. ${it.size}${it.print?" | Schriftzug":""}${it.initials?` | Initialen: ${it.initials}`:""}`;}).join("\n");
+}
+
+form.addEventListener("submit",async e=>{
+ e.preventDefault();
+ const err=$("err"); err.style.display="none";
+ if(!cart.length){err.textContent="Der Warenkorb ist leer.";err.style.display="block";return;}
+ const req=["f_name","f_str","f_plz","f_tel","f_mail"]; let bad=null;
+ req.forEach(id=>{const el=$(id);const ok=el.value.trim()&&(id!=="f_mail"||/^\S+@\S+\.\S+$/.test(el.value.trim()));el.style.borderColor=ok?"":"#b42318";if(!ok&&!bad)bad=el;});
+ if(form.versand.value==="Versand"&&form.versandadresse_art.value==="abweichend"&&!$("f_ship").value.trim()){bad=bad||$("f_ship");$("f_ship").style.borderColor="#b42318";}
+ if(bad){err.textContent="Bitte alle Pflichtfelder (*) korrekt ausfüllen.";err.style.display="block";bad.focus();return;}
+ const {n,s}=totals();
+ $("f_order").value=orderText(); $("f_count").value=n; $("f_sum").value=eur(s);
+ $("f_subject").value=`Bestellung TSV Iggelheim LA – ${$("f_name").value.trim()} (${n} Teile)`;
+ const btn=$("sendBtn"); btn.disabled=true; btn.textContent="Wird gesendet …";
+ try{
+  const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams(new FormData(form)).toString()});
+  if(!r.ok) throw new Error(r.status);
+  showDone();
+ }catch(x){
+  err.textContent="Senden hat nicht geklappt. Bitte Internetverbindung prüfen und nochmal versuchen.";err.style.display="block";
+ }finally{ btn.disabled=false; btn.textContent="Bestellung verbindlich absenden"; }
+});
+
+let lastText="";
+function showDone(){
+ const fd=new FormData(form), {n,s}=totals();
+ const ship=fd.get("versand")==="Versand"?(fd.get("versandadresse_art")==="abweichend"?"Versand an: "+fd.get("versandadresse"):"Versand – Adresse wie oben"):"Abholung";
+ const date=new Date().toLocaleDateString("de-DE");
+ const rows=cart.map(it=>{const p=PRODUCTS.find(x=>x.id===it.id);return `<tr><td>${p.art}<br><small>${esc(p.name)}${it.print?" + Schriftzug":""}</small></td><td>${esc(it.size)}</td><td>${it.qty}</td><td>${esc(it.initials||"")}</td></tr>`;}).join("");
+ $("doc").innerHTML=`
+  <h3>Bestellformular</h3>
+  <p class="sub">TSV Iggelheim · Abteilung Leichtathletik · Sammelbestellung · ${date}</p>
+  <table>
+   <tr><td class="k">Name</td><td>${esc(fd.get("name"))}${fd.get("sportler")?` (für ${esc(fd.get("sportler"))})`:""}</td></tr>
+   <tr><td class="k">Straße / Hausnummer</td><td>${esc(fd.get("strasse"))}</td></tr>
+   <tr><td class="k">PLZ / Ort</td><td>${esc(fd.get("plz_ort"))}</td></tr>
+   <tr><td class="k">Telefon</td><td>${esc(fd.get("telefon"))}</td></tr>
+   <tr><td class="k">E-Mail</td><td>${esc(fd.get("email"))}</td></tr>
+  </table>
+  <table><tr><th>Artikelnummer</th><th>Größe</th><th>Anzahl</th><th>Initialen (optional)</th></tr>${rows}</table>
+  <p>${fd.get("versand")==="Versand"?"☒":"☐"} Versand &nbsp; ${fd.get("versand")==="Abholung"?"☒":"☐"} Abholung<br>${esc(ship)}</p>
+  ${fd.get("bemerkung")?`<p>Bemerkung: ${esc(fd.get("bemerkung"))}</p>`:""}
+  <p><b>${n} Teile · Gesamt ${eur(s)}</b><br><small>Vereinspreis = UVP −45 % zzgl. Schriftzug (8,00 €) / Initialen (3,50 €).</small></p>`;
+ lastText=`Bestellung TSV Iggelheim Leichtathletik (${date})\n${fd.get("name")}${fd.get("sportler")?" für "+fd.get("sportler"):""}\n\n${orderText()}\n\n${ship}\n${n} Teile · Gesamt ${eur(s)}`;
+ $("checkout").classList.add("hidden"); $("done").classList.remove("hidden"); $("overlay").scrollTop=0;
+}
+$("printBtn").onclick=()=>window.print();
+$("waBtn").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(lastText),"_blank");
+$("newBtn").onclick=()=>{ cart=[]; save(); updateBar(); ["f_sportler","f_note","f_order"].forEach(id=>$(id).value=""); $("checkout").classList.remove("hidden"); $("done").classList.add("hidden"); renderCart(); };
+
+render(); updateBar();
+</script>
+</body>
+</html>
