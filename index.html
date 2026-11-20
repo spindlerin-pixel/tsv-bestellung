@@ -79,6 +79,11 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
 .hidden{display:none!important}
 .success{background:#e9f7ef;border:1px solid #b6e3c8;border-radius:12px;padding:12px 14px;margin-bottom:14px}
 .actions{display:grid;gap:8px;margin-top:12px}
+.pay{background:#fff7e6;border:1.5px solid #f0c36d;border-radius:12px;padding:14px;margin-bottom:14px;text-align:center}
+.pay-h{font-weight:700;color:var(--navy)}
+.pay-amt{font-size:30px;font-weight:800;color:var(--navy);margin:4px 0}
+.pay p{font-size:14px;margin:6px 0 10px}
+.btn.pp{display:block;text-decoration:none;background:#ffc439;color:#14284b}
 /* Bestellformular (Druck) */
 .doc{border:1px solid var(--line);border-radius:10px;padding:16px;font-family:Cambria,Georgia,serif;font-size:13px;background:#fff}
 .doc h3{text-align:center;color:#2f5597;margin:0 0 4px;font-size:18px}
@@ -110,8 +115,9 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
   <ul>
    <li>Bei jedem Artikel Größe, Anzahl und optional Initialen wählen → <b>„In den Warenkorb“</b>.</li>
    <li>Unten auf <b>„Warenkorb & Bestellen“</b> tippen, Kontaktdaten eintragen und absenden.</li>
-   <li>Danach kannst du dein ausgefülltes Bestellformular speichern/drucken.</li>
+   <li>Danach den angezeigten Betrag in den <b>PayPal-Pool</b> einzahlen – erst nach Zahlungseingang wird die Bestellung an Absolute Teamsport weitergegeben.</li>
   </ul>
+  <p style="margin:8px 0 0"><b>Bestellschluss:</b> Freitag, 27.11.2026. Die Kleidung wird gesammelt bestellt; die Ausgabe organisiert die Abteilung Leichtathletik.</p>
   <p style="margin:8px 0 0"><b>Preise:</b> Angegeben ist die UVP. Vereinspreis: <b>UVP −45 %</b>. Dazu Rückenschriftzug „TSV Iggelheim Leichtathletik“ (doppelzeilig) <b>+8,00 €</b> und Initialen <b>+3,50 €</b>. Der angezeigte Preis ist bereits der Vereinspreis.</p>
  </div>
 
@@ -141,25 +147,9 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
     <fieldset>
      <legend>Besteller/in</legend>
      <div class="fg"><label class="f" for="f_name">Name *</label><input type="text" id="f_name" name="name" autocomplete="name" required></div>
-     <div class="fg"><label class="f" for="f_sportler">Für wen? (Name Sportler/in, falls abweichend)</label><input type="text" id="f_sportler" name="sportler"></div>
-     <div class="fg"><label class="f" for="f_str">Straße / Hausnummer *</label><input type="text" id="f_str" name="strasse" autocomplete="street-address" required></div>
-     <div class="fg"><label class="f" for="f_plz">PLZ / Ort *</label><input type="text" id="f_plz" name="plz_ort" autocomplete="postal-code" required></div>
+     <div class="fg"><label class="f" for="f_sportler">Name Sportler/in (für wen ist die Kleidung?) *</label><input type="text" id="f_sportler" name="sportler" required></div>
      <div class="fg"><label class="f" for="f_tel">Telefon *</label><input type="tel" id="f_tel" name="telefon" autocomplete="tel" required></div>
      <div class="fg"><label class="f" for="f_mail">E-Mail *</label><input type="email" id="f_mail" name="email" autocomplete="email" required></div>
-    </fieldset>
-    <fieldset>
-     <legend>Lieferung</legend>
-     <div class="radio">
-      <label><input type="radio" name="versand" value="Abholung" checked> Abholung</label>
-      <label><input type="radio" name="versand" value="Versand"> Versand</label>
-     </div>
-     <div id="shipBox" class="hidden">
-      <div class="radio">
-       <label><input type="radio" name="versandadresse_art" value="wie oben" checked> wie oben</label>
-       <label><input type="radio" name="versandadresse_art" value="abweichend"> an:</label>
-      </div>
-      <textarea id="f_ship" name="versandadresse" rows="2" class="hidden" placeholder="Abweichende Versandadresse"></textarea>
-     </div>
     </fieldset>
     <div class="fg"><label class="f" for="f_note">Bemerkung (optional)</label><textarea id="f_note" name="bemerkung" rows="2"></textarea></div>
     <textarea name="bestellung" id="f_order" class="hidden"></textarea>
@@ -172,7 +162,14 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
   </div>
 
   <div id="done" class="hidden">
-   <div class="success noprint"><b>Danke! Deine Bestellung ist eingegangen.</b><br>Hier ist dein ausgefülltes Bestellformular zum Speichern.</div>
+   <div class="success noprint"><b>Danke! Deine Bestellung ist eingegangen.</b></div>
+   <div class="pay noprint">
+    <div class="pay-h">Jetzt bezahlen</div>
+    <div class="pay-amt" id="payAmt"></div>
+    <p>Bitte zahle diesen Betrag bis <b>27.11.</b> in den PayPal-Pool ein und gib als Namen bzw. Notiz <b id="payRef"></b> an. Erst nach Zahlungseingang wird deine Bestellung weitergegeben.</p>
+    <a class="btn pp" id="payBtn" target="_blank" rel="noopener">Zum PayPal-Pool</a>
+    <p class="hint">Einzahlen geht auch ohne eigenes PayPal-Konto.</p>
+   </div>
    <div class="doc" id="doc"></div>
    <div class="actions noprint">
     <button class="btn" id="printBtn">Als PDF speichern / drucken</button>
@@ -184,6 +181,7 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
 </div>
 
 <script>
+const PAY_URL = "https://www.paypal.com/pool/9uy89GQkJa"; // Link zum PayPal-Pool
 const PRINT = 8.00, INIT = 3.50, FACTOR = 0.55;
 const ADULT_XS5 = ["XS","S","M","L","XL","2XL","3XL","4XL","5XL"];
 const ADULT_S3 = ["S","M","L","XL","2XL","3XL"];
@@ -322,10 +320,6 @@ $("openCart").onclick=()=>{ $("checkout").classList.remove("hidden"); $("done").
 $("closeCart").onclick=()=>{ $("overlay").classList.remove("open"); document.body.style.overflow=""; };
 
 const form=$("orderForm");
-form.addEventListener("change",()=>{
- const v=form.versand.value==="Versand"; $("shipBox").classList.toggle("hidden",!v);
- $("f_ship").classList.toggle("hidden",!(v&&form.versandadresse_art.value==="abweichend"));
-});
 
 function orderText(){
  return cart.map(it=>{const p=PRODUCTS.find(x=>x.id===it.id);
@@ -336,9 +330,8 @@ form.addEventListener("submit",async e=>{
  e.preventDefault();
  const err=$("err"); err.style.display="none";
  if(!cart.length){err.textContent="Der Warenkorb ist leer.";err.style.display="block";return;}
- const req=["f_name","f_str","f_plz","f_tel","f_mail"]; let bad=null;
+ const req=["f_name","f_sportler","f_tel","f_mail"]; let bad=null;
  req.forEach(id=>{const el=$(id);const ok=el.value.trim()&&(id!=="f_mail"||/^\S+@\S+\.\S+$/.test(el.value.trim()));el.style.borderColor=ok?"":"#b42318";if(!ok&&!bad)bad=el;});
- if(form.versand.value==="Versand"&&form.versandadresse_art.value==="abweichend"&&!$("f_ship").value.trim()){bad=bad||$("f_ship");$("f_ship").style.borderColor="#b42318";}
  if(bad){err.textContent="Bitte alle Pflichtfelder (*) korrekt ausfüllen.";err.style.display="block";bad.focus();return;}
  const {n,s}=totals();
  $("f_order").value=orderText(); $("f_count").value=n; $("f_sum").value=eur(s);
@@ -356,24 +349,23 @@ form.addEventListener("submit",async e=>{
 let lastText="";
 function showDone(){
  const fd=new FormData(form), {n,s}=totals();
- const ship=fd.get("versand")==="Versand"?(fd.get("versandadresse_art")==="abweichend"?"Versand an: "+fd.get("versandadresse"):"Versand – Adresse wie oben"):"Abholung";
  const date=new Date().toLocaleDateString("de-DE");
  const rows=cart.map(it=>{const p=PRODUCTS.find(x=>x.id===it.id);return `<tr><td>${p.art}<br><small>${esc(p.name)}${it.print?" + Schriftzug":""}</small></td><td>${esc(it.size)}</td><td>${it.qty}</td><td>${esc(it.initials||"")}</td></tr>`;}).join("");
  $("doc").innerHTML=`
   <h3>Bestellformular</h3>
   <p class="sub">TSV Iggelheim · Abteilung Leichtathletik · Sammelbestellung · ${date}</p>
   <table>
-   <tr><td class="k">Name</td><td>${esc(fd.get("name"))}${fd.get("sportler")?` (für ${esc(fd.get("sportler"))})`:""}</td></tr>
-   <tr><td class="k">Straße / Hausnummer</td><td>${esc(fd.get("strasse"))}</td></tr>
-   <tr><td class="k">PLZ / Ort</td><td>${esc(fd.get("plz_ort"))}</td></tr>
+   <tr><td class="k">Besteller/in</td><td>${esc(fd.get("name"))}</td></tr>
+   <tr><td class="k">Sportler/in</td><td>${esc(fd.get("sportler"))}</td></tr>
    <tr><td class="k">Telefon</td><td>${esc(fd.get("telefon"))}</td></tr>
    <tr><td class="k">E-Mail</td><td>${esc(fd.get("email"))}</td></tr>
   </table>
   <table><tr><th>Artikelnummer</th><th>Größe</th><th>Anzahl</th><th>Initialen (optional)</th></tr>${rows}</table>
-  <p>${fd.get("versand")==="Versand"?"☒":"☐"} Versand &nbsp; ${fd.get("versand")==="Abholung"?"☒":"☐"} Abholung<br>${esc(ship)}</p>
   ${fd.get("bemerkung")?`<p>Bemerkung: ${esc(fd.get("bemerkung"))}</p>`:""}
   <p><b>${n} Teile · Gesamt ${eur(s)}</b><br><small>Vereinspreis = UVP −45 % zzgl. Schriftzug (8,00 €) / Initialen (3,50 €).</small></p>`;
- lastText=`Bestellung TSV Iggelheim Leichtathletik (${date})\n${fd.get("name")}${fd.get("sportler")?" für "+fd.get("sportler"):""}\n\n${orderText()}\n\n${ship}\n${n} Teile · Gesamt ${eur(s)}`;
+ lastText=`Bestellung TSV Iggelheim Leichtathletik (${date})\n${fd.get("name")} für ${fd.get("sportler")}\n\n${orderText()}\n\n${n} Teile · Gesamt ${eur(s)}`;
+ $("payAmt").textContent=eur(s); $("payRef").textContent=fd.get("sportler")||fd.get("name");
+ const pb=$("payBtn"); if(PAY_URL){pb.href=PAY_URL;pb.classList.remove("hidden");}else{pb.classList.add("hidden");}
  $("checkout").classList.add("hidden"); $("done").classList.remove("hidden"); $("overlay").scrollTop=0;
 }
 $("printBtn").onclick=()=>window.print();
