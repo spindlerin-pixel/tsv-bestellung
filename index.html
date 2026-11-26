@@ -118,7 +118,7 @@ legend{font-weight:700;color:var(--navy);padding:0 6px}
    <li>Danach den angezeigten Betrag in den <b>PayPal-Pool</b> einzahlen – erst nach Zahlungseingang wird die Bestellung an Absolute Teamsport weitergegeben.</li>
   </ul>
   <p style="margin:8px 0 0"><b>Bestellschluss:</b> Freitag, 27.11.2026. Die Kleidung wird gesammelt bestellt; die Ausgabe organisiert die Abteilung Leichtathletik.</p>
-  <p style="margin:8px 0 0"><b>Preise:</b> Angegeben ist die UVP. Vereinspreis: <b>UVP −45 %</b>. Dazu Rückenschriftzug „TSV Iggelheim Leichtathletik“ (doppelzeilig) <b>+8,00 €</b> und Initialen <b>+3,50 €</b>. Der angezeigte Preis ist bereits der Vereinspreis.</p>
+  <p style="margin:8px 0 0"><b>Preise:</b> Bei jedem Artikel steht fett der <b>Vereinspreis (UVP −45 %)</b>, daneben durchgestrichen die UVP. Dazu kommen Rückenschriftzug „TSV Iggelheim Leichtathletik“ (doppelzeilig) <b>+8,00 €</b> und Initialen <b>+3,50 €</b>. Im Warenkorb steht dein Endpreis mit allem.</p>
  </div>
 
  <nav class="tabs" id="tabs"></nav>
@@ -235,9 +235,10 @@ function save(){ try{ localStorage.setItem("tsv_la_cart",JSON.stringify(cart)); 
 
 function priceLines(p){
  return p.groups.map(gr=>{
-  if(typeof gr.price==="object") return `<span>${gr.sizes.map(s=>`${s}: UVP ${eur(gr.price[s])}`).join(" · ")}</span>`;
+  const vp=u=>`<b>${eur(Math.round(u*FACTOR*100)/100)}</b> <s>UVP ${eur(u)}</s>`;
+  if(typeof gr.price==="object") return `<span>${gr.sizes.map(s=>`${s}: ${vp(gr.price[s])}`).join(" · ")}</span>`;
   const r = gr.sizes.length>1?`${gr.sizes[0]}–${gr.sizes[gr.sizes.length-1]}`:gr.sizes[0];
-  return `<span>${gr.label} (${r}): UVP ${eur(gr.price)}</span>`;
+  return `<span>${gr.label} (${r}): ${vp(gr.price)}</span>`;
  }).join("");
 }
 function sizeOptions(p){
